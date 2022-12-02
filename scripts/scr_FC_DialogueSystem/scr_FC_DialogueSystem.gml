@@ -2,6 +2,60 @@ enum EFFECT_TYPE {
 	NORMAL, SHAKEY, WAVE, COLOUR_SHIFT, WAVE_AND_COLOUR_SHIFT, SPIN, PULSE, FLICKER
 }
 
+function add_parsed_dialogue_line(text, page_number) {
+	// %0e		- effect
+	// %0s		- speed
+	// %BBGGRRc	- color (in hex)
+	// %%		- %
+	var _offset = 0;
+	myText[page_number] = "";
+	myEffects[page_number] = [];
+	myTextSpeed[page_number] = [];
+	myTextCol[page_number] = [];
+	for(var i = 1; i < string_length(text); i++) {
+		var _char = string_char_at(text, i);
+		if(_char == "%") {
+			var _cmd = "";
+			var _search = i + 1;
+			while(_search < string_length(text)) {
+				var _charCmd = string_char_at(text, _search);
+				if(_charCmd == "%") {
+					myText[page_number] += "%";
+					_offset++;
+					break;
+				}
+				else if(_charCmd == "e") {
+					array_push(myEffects[page_number], i - _offset, real(_cmd));
+					_offset += _search - i + 1;
+					break;
+				}
+				else if(_charCmd == "s") {
+					array_push(myTextSpeed[page_number], i - _offset, real(_cmd));
+					_offset += _search - i + 1;
+					break;
+				}
+				else if(_charCmd == "c") {
+					var _ptr = ptr(string_lower(_cmd));
+					var _col = int64(_ptr);
+					array_push(myTextCol[page_number], i - _offset, _col);
+					_offset += _search - i + 1;
+					break;
+				}
+				_cmd += _charCmd;
+				_search++;
+			}
+			i = _search;
+		}
+		else {
+			myText[page_number] += _char;
+		}
+	}
+	if(array_length(myEffects[page_number]) == 0) { myEffects[page_number] = 0; }
+	if(array_length(myTextSpeed[page_number]) == 0) { myTextSpeed[page_number] = 0; }
+	if(array_length(myTextCol[page_number]) == 0) { myTextCol[page_number] = 0; }
+	
+}
+
 function change_variable(obj, var_name_as_string, new_value) {
 	with(obj) var oid = id;
 	variable_instance_set(oid, var_name_as_string, new_value);
@@ -164,6 +218,35 @@ function create_textevent(text, speaker, effects = undefined, text_speed = undef
 		if(!is_undefined(next_line))	myNextLine	= next_line;
 		if(!is_undefined(scripts))		myScripts	= scripts;
 		if(!is_undefined(text_col))		myTextCol	= text_col;
+		if(!is_undefined(emotion))		myEmotion	= emotion;
+		if(!is_undefined(emote))		myEmote		= emote;
+	
+		event_perform(ev_other, ev_user0);
+	}
+
+	return textevent;
+}
+
+function create_textevent_parsed(text, speaker, type = undefined, next_line = undefined, scripts = undefined, emotion = undefined, emote = undefined) {
+	if(instance_exists(obj_textevent)){ exit; }
+
+	var textevent = instance_create_layer(0,0,"Instances",obj_textevent);
+
+	with(textevent){
+		reset_dialogue_defaults();
+		
+		if(is_array(text)) {
+			for(var i = 0; i < array_length(text); i++) {
+				add_parsed_dialogue_line(text[i], i);
+			}
+		}
+		else {
+			add_parsed_dialogue_line(text, 0);
+		}
+		mySpeaker	= speaker;
+		if(!is_undefined(type))			myTypes		= type;
+		if(!is_undefined(next_line))	myNextLine	= next_line;
+		if(!is_undefined(scripts))		myScripts	= scripts;
 		if(!is_undefined(emotion))		myEmotion	= emotion;
 		if(!is_undefined(emote))		myEmote		= emote;
 	

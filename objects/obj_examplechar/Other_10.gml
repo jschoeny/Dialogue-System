@@ -7,7 +7,10 @@ switch(choice_variable){
 	#region First Dialogue
 		//Line 0
 		var i = 0;
-		myText[i]		= "You can run a script after any line of dialogue! Let's make an emote to the left.";
+		add_parsed_dialogue_line(
+			"You can run %00FF00c%1ea script%FFFFFFc%0e after any line of dialogue! Let's make an emote to the left.",
+			i
+		);
 		mySpeaker[i]	= id;
 		myScripts[i]	= function() {	//Uses a method variable
 			var _x = irandom_range(100, 170);
