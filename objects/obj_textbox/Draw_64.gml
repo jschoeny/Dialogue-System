@@ -184,27 +184,32 @@ else {
 		}
 		
 		switch(effect){
-			case 0:	//normal
+			case EFFECT_TYPE.NORMAL:
+			case 0:
 				draw_text_color(xx + (cx*charSize), yy+(cy*stringHeight), letter, col, col, col, col, 1);
 				break;
 			
-			case 1:	//shakey
+			case EFFECT_TYPE.SHAKEY:
+			case 1:
 				draw_text_color(xx + (cx*charSize)+random_range(-1,1), yy+(cy*stringHeight)+random_range(-1,1), letter, col, col, col, col, 1);
 				break;
 			
-			case 2:	//wave
+			case EFFECT_TYPE.WAVE:
+			case 2:
 				var so = t;
 				var shift = sin(so*pi*freq/room_speed)*amplitude;
 				draw_text_color(xx + (cx*charSize), yy+(cy*stringHeight)+shift, letter, col, col, col, col, 1);
 				break; 
 			
-			case 3: //colour shift
+			case EFFECT_TYPE.COLOUR_SHIFT:
+			case 3:
 				var c1 = make_colour_hsv(t+cc, 255, 255);
 				var c2 = make_colour_hsv(t+cc+34, 255, 255);
 				draw_text_color(xx + (cx*charSize), yy+(cy*stringHeight), letter, c1, c1, c2, c2, 1);
 				break;
 		
-			case 4: //wave AND colour shift
+			case EFFECT_TYPE.WAVE_AND_COLOUR_SHIFT:
+			case 4:
 				var so = t + cc;
 				var shift = sin(so*pi*freq/room_speed)*amplitude;
 				var c1 = make_colour_hsv(t+cc, 255, 255);
@@ -212,7 +217,8 @@ else {
 				draw_text_color(xx + (cx*charSize), yy+(cy*stringHeight)+shift, letter, c1, c1, c2, c2, 1);
 				break; 
 		
-			case 5: //spin
+			case EFFECT_TYPE.SPIN:
+			case 5:
 				var so = t + cc;
 				var shift = sin(so*pi*freq/room_speed);
 				var mv = charSize/2;
@@ -221,7 +227,8 @@ else {
 				draw_set_valign(fa_top); draw_set_halign(fa_left);
 				break;
 				
-			case 6: //pulse
+			case EFFECT_TYPE.PULSE:
+			case 6:
 				var so = t + cc;
 				var shift = abs(sin(so*pi*freq/room_speed));
 				var mv = charSize/2;
@@ -230,7 +237,8 @@ else {
 				draw_set_valign(fa_top); draw_set_halign(fa_left);
 				break;
 				
-			case 7:	//flicker
+			case EFFECT_TYPE.FLICKER:
+			case 7:
 				var so = t + cc;
 				var shift = sin(so*pi*freq/room_speed);
 				draw_text_color(xx + (cx*charSize), yy+(cy*stringHeight), letter, col, col, col, col, shift+random_range(-1,1));

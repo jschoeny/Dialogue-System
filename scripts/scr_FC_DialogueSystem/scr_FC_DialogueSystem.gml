@@ -1,3 +1,7 @@
+enum EFFECT_TYPE {
+	NORMAL, SHAKEY, WAVE, COLOUR_SHIFT, WAVE_AND_COLOUR_SHIFT, SPIN, PULSE, FLICKER
+}
+
 function change_variable(obj, var_name_as_string, new_value) {
 	with(obj) var oid = id;
 	variable_instance_set(oid, var_name_as_string, new_value);
