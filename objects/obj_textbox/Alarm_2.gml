@@ -4,14 +4,7 @@
 #region Update choice and page
 
 //Change an object's variable according to choice if applicable
-var cv = executeScript[page];
-if(is_array(cv)){
-	cv = cv[choice];
-	var len = array_length(cv)-1;
-	var cva = array_create(len, 0);
-	array_copy(cva, 0, cv, 1, len); 
-	script_execute_alt(cv[0], cva);
-}
+event_user(0);
 
 //Update page
 if(page+1 < array_length(text)){

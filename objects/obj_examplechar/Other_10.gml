@@ -9,7 +9,11 @@ switch(choice_variable){
 		var i = 0;
 		myText[i]		= "You can run a script after any line of dialogue! Let's make an emote to the left.";
 		mySpeaker[i]	= id;
-		myScripts[i]	= [create_instance_layer, 170,120,"Instances",obj_emote];
+		myScripts[i]	= function() {	//Uses a method variable
+			var _x = irandom_range(100, 170);
+			var _y = irandom_range(80, 180);
+			instance_create_layer(_x, _y, "Instances", obj_emote);
+		};
 		
 		//Line 1
 		i++;
@@ -58,7 +62,10 @@ switch(choice_variable){
 		myText[i]		= ["(sarcastically) Blue is the best colour.", "Green is the best colour."];
 		myTypes[i]		= 1;
 		myNextLine[i]	= [8,9];
-		myScripts[i]	= [[change_variable, id, "choice_variable", "blue"], [change_variable, id, "choice_variable", "green"]];
+		myScripts[i]	= [
+			[change_variable, id, "choice_variable", "blue"],
+			function() { self.choice_variable = "green"; }
+		];
 		mySpeaker[i]	= obj_player;
 
 		//Line 8
